@@ -1,0 +1,17 @@
+.mat-table-container {
+  height: 400px;
+  overflow: auto;
+  overflow-x: auto;
+  min-width: 450px;
+}
+
+/* This fills the remaining space, by using flexbox. 
+     Every toolbar row uses a flexbox row layout. */
+.right-align-empty-space {
+  flex: 1 1 auto;
+}
+mat-header-cell,
+mat-cell {
+  /* display: inline-flex; */
+  min-width: 100px;
+}
