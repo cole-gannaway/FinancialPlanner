@@ -1,24 +1,24 @@
-<div class="mat-table-container">
-  <!-- Toolbar -->
-  <mat-toolbar
-    >{{ title }}
-    <!-- Add new row button -->
-    <span>
-      <mat-icon aria-hidden="false">add_circle_outline</mat-icon>
-    </span>
-    <!-- This fills the remaining space of the current row -->
-    <span class="right-align-empty-space"></span>
+<!-- Toolbar -->
+<mat-toolbar
+  >{{ title }}
+  <!-- Add new row button -->
+  <span>
+    <mat-icon aria-hidden="false">add_circle_outline</mat-icon>
+  </span>
+  <!-- This fills the remaining space of the current row -->
+  <span class="right-align-empty-space"></span>
 
-    <!-- Search Bar -->
-    <span>
-      <mat-icon aria-hidden="false">search</mat-icon>
-      <mat-form-field>
-        <input matInput type="text" />
-      </mat-form-field>
-    </span>
-  </mat-toolbar>
+  <!-- Search Bar -->
+  <span>
+    <mat-icon aria-hidden="false">search</mat-icon>
+    <mat-form-field>
+      <input matInput type="text" />
+    </mat-form-field>
+  </span>
+</mat-toolbar>
 
-  <!-- Table container -->
+<!-- Table container -->
+<div class="data-table-container">
   <mat-table
     #table
     [dataSource]="dataSource"
@@ -31,7 +31,7 @@
         Label
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-form-field>
+        <mat-form-field style="width: 80px;">
           <input matInput type="text" [(ngModel)]="element.label" required />
           <mat-error>This field is required</mat-error>
         </mat-form-field>
