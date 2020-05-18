@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { RowData } from '../model/RowData';
-import { DataSource } from '@angular/cdk/table';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-data-table',
@@ -12,7 +12,9 @@ export class DataTableComponent implements OnInit {
   // tslint:disable-next-line: no-input-rename
   @Input('title') title: string;
   // tslint:disable-next-line: no-input-rename
-  @Input('dataSource') dataSource: DataSource<RowData>;
+  @Input('data') data: Array<RowData>;
+  dataSource: MatTableDataSource<RowData> = new MatTableDataSource<RowData>();
+  filterText = '';
   displayedColumns: string[] = [
     'label',
     'date',
@@ -23,23 +25,40 @@ export class DataTableComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // const numRows = 30;
-    // for (let i = 0; i < numRows; i++) {
-    //   this.dataSource.push(new RowData());
-    // }
+    this.data.push(new RowData());
+    this.reRedner(this.data);
   }
 
+  onFilterData(event: any) {
+    this.reRedner(this.data);
+  }
   onSortData(sortChange: Sort) {
-    console.log(sortChange.active);
-    console.log(sortChange.direction);
+    console.log(
+      'sortChange requested for ' +
+        sortChange.active +
+        ' direction: ' +
+        sortChange.direction
+    );
   }
   onAddNewRow() {
-    // this.dataSource.connect();
-    // this.dataSource.renderRows();
     console.log('add new row requested');
+    this.data.push(new RowData());
+    this.reRedner(this.data);
   }
-  deleteRow(i: number) {
-    console.log('delete row requested for row ' + i);
-    // this.dataSource.splice(i, 1);
+  deleteRow(id: string) {
+    console.log('delete row requested for id ' + id);
+    for (let i = 0; i < this.data.length; i++) {
+      const row = this.data[i];
+      if (row.id === id) {
+        this.data.splice(i, 1);
+        break;
+      }
+    }
+    this.reRedner(this.data);
+  }
+  reRedner(data: RowData[]) {
+    this.dataSource.data = this.data.filter((row) => {
+      return row.label.includes(this.filterText);
+    });
   }
 }

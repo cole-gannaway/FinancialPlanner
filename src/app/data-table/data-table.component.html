@@ -12,7 +12,12 @@
   <span>
     <mat-icon aria-hidden="false">search</mat-icon>
     <mat-form-field>
-      <input matInput type="text" />
+      <input
+        matInput
+        type="text"
+        [(ngModel)]="filterText"
+        (keyup)="onFilterData($event)"
+      />
     </mat-form-field>
   </span>
 </mat-toolbar>
@@ -90,8 +95,10 @@
     <!-- Delete Column -->
     <ng-container matColumnDef="delete">
       <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-      <mat-cell *matCellDef="let element; let i = index">
-        <mat-icon aria-hidden="false" (click)="deleteRow(i)">delete</mat-icon>
+      <mat-cell *matCellDef="let element">
+        <mat-icon aria-hidden="false" (click)="deleteRow(element.id)"
+          >delete</mat-icon
+        >
       </mat-cell>
     </ng-container>
 

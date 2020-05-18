@@ -1,11 +1,8 @@
 <div class="app-container">
   <div class="data-tables-container">
+    <app-data-table [data]="incomeTableData" title="Income"></app-data-table>
     <app-data-table
-      [dataSource]="incomeTableData"
-      title="Income"
-    ></app-data-table>
-    <app-data-table
-      [dataSource]="expensesTableData"
+      [data]="expensesTableData"
       title="Expenses"
     ></app-data-table>
   </div>
