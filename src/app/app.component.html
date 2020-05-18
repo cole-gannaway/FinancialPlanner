@@ -1,7 +1,13 @@
 <div class="app-container">
   <div class="data-tables-container">
-    <app-data-table></app-data-table>
-    <app-data-table></app-data-table>
+    <app-data-table
+      [dataSource]="incomeTableData"
+      title="Income"
+    ></app-data-table>
+    <app-data-table
+      [dataSource]="expensesTableData"
+      title="Expenses"
+    ></app-data-table>
   </div>
   <div class="line-chart-container">
     <app-line-graph></app-line-graph>

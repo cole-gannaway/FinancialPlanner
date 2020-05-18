@@ -1,109 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { RowData } from '../model/RowData';
+import { Component, OnInit, Input } from '@angular/core';
 import { Sort } from '@angular/material/sort';
-
-const TestRowData: RowData[] = [
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 2,
-    frequency: 'hello',
-  },
-  {
-    label: 'hello',
-    amount: 3,
-    frequency: 'hello',
-  },
-];
+import { RowData } from '../model/RowData';
+import { DataSource } from '@angular/cdk/table';
 
 @Component({
   selector: 'app-data-table',
@@ -111,8 +9,10 @@ const TestRowData: RowData[] = [
   styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent implements OnInit {
-  title = 'Title';
-  dataSource: RowData[] = TestRowData;
+  // tslint:disable-next-line: no-input-rename
+  @Input('title') title: string;
+  // tslint:disable-next-line: no-input-rename
+  @Input('dataSource') dataSource: DataSource<RowData>;
   displayedColumns: string[] = [
     'label',
     'date',
@@ -122,10 +22,24 @@ export class DataTableComponent implements OnInit {
   ];
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // const numRows = 30;
+    // for (let i = 0; i < numRows; i++) {
+    //   this.dataSource.push(new RowData());
+    // }
+  }
 
   onSortData(sortChange: Sort) {
     console.log(sortChange.active);
     console.log(sortChange.direction);
+  }
+  onAddNewRow() {
+    // this.dataSource.connect();
+    // this.dataSource.renderRows();
+    console.log('add new row requested');
+  }
+  deleteRow(i: number) {
+    console.log('delete row requested for row ' + i);
+    // this.dataSource.splice(i, 1);
   }
 }
