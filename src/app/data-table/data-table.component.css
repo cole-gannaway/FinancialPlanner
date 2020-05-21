@@ -8,3 +8,19 @@
 .right-align-empty-space {
   flex: 1 1 auto;
 }
+
+.label-form {
+  min-width: 40px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.label-date {
+  min-width: 100px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}

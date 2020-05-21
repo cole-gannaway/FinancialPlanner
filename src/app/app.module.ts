@@ -28,6 +28,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 /* Material Icons */
 import { MatIconModule } from '@angular/material/icon';
 
+/* Charts */
+import { ChartsModule } from 'ng2-charts';
+
 @NgModule({
   declarations: [AppComponent, DataTableComponent, LineGraphComponent],
   imports: [
@@ -46,6 +49,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatNativeDateModule,
     MatDatepickerModule,
     MatIconModule,
+    ChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

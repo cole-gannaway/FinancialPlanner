@@ -36,10 +36,12 @@
         Label
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-form-field style="width: 80px;">
-          <input matInput type="text" [(ngModel)]="element.label" required />
-          <mat-error>This field is required</mat-error>
-        </mat-form-field>
+        <div class="label-form">
+          <mat-form-field class="full-width">
+            <input matInput type="text" [(ngModel)]="element.label" required />
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+        </div>
       </mat-cell>
     </ng-container>
 
@@ -49,15 +51,17 @@
         Date
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-form-field style="width: 100px;">
-          <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="picker" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+        <div class="label-form">
+          <mat-form-field class="full-width">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
       </mat-cell>
     </ng-container>
 
@@ -67,7 +71,7 @@
         Amount
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-form-field>
+        <mat-form-field style="min-width: 80px;">
           <input matInput type="number" [(ngModel)]="element.amount" required />
           <mat-error>This field is required</mat-error>
         </mat-form-field>
@@ -80,21 +84,23 @@
         Frequency
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            type="text"
-            [(ngModel)]="element.frequency"
-            required
-          />
-          <mat-error>This field is required</mat-error>
-        </mat-form-field>
+        <div class="label-form">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              type="text"
+              [(ngModel)]="element.frequency"
+              required
+            />
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+        </div>
       </mat-cell>
     </ng-container>
 
     <!-- Delete Column -->
     <ng-container matColumnDef="delete">
-      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>X</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <mat-icon aria-hidden="false" (click)="deleteRow(element.id)"
           >delete</mat-icon
