@@ -1,13 +1,22 @@
 <div class="app-container">
-  <div class="data-tables-container">
-    <app-data-table [data]="incomeTableData" title="Income"></app-data-table>
-    <br /><br />
-    <app-data-table
-      [data]="expensesTableData"
-      title="Expenses"
-    ></app-data-table>
+  <div class="app-title-container">
+    <h1>Financial Planner</h1>
   </div>
+  <div class="data-tables-container">
+    <div class="data-table-container">
+      <app-data-table [data]="incomeTableData" title="Income"></app-data-table>
+    </div>
+    <br /><br />
+    <div class="data-table-container">
+      <app-data-table
+        [data]="expensesTableData"
+        title="Expenses"
+      ></app-data-table>
+    </div>
+  </div>
+  <br /><br />
   <div class="line-chart-container">
     <app-line-graph></app-line-graph>
   </div>
+  <button (click)="debug()">Debug</button>
 </div>

@@ -13,5 +13,7 @@ export class AppComponent {
 
   debug() {
     console.log('debug');
+    console.log(this.incomeTableData);
+    console.log(this.expensesTableData);
   }
 }

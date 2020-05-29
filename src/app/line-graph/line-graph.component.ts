@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RowData } from '../model/RowData';
+import { Color } from 'ng2-charts';
+import { ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-line-graph',
@@ -16,25 +18,70 @@ export class LineGraphComponent implements OnInit {
       data: [
         {
           x: new Date(),
-          y: 1,
+          y: -1,
+        },
+        {
+          x: new Date().setDate(2),
+          y: -2,
+        },
+      ],
+      label: 'Expenses',
+    },
+    {
+      data: [
+        {
+          x: new Date(),
+          y: 10,
         },
         {
           x: new Date().setDate(2),
           y: 2,
         },
       ],
-      label: 'Series A',
+      label: 'Income',
+    },
+    {
+      data: [
+        {
+          x: new Date(),
+          y: -2,
+        },
+        {
+          x: new Date().setDate(2),
+          y: 2,
+        },
+      ],
+      label: 'Wallet',
     },
   ];
-  lineChartOptions = {
-    scaleShowVerticalLines: false,
+  lineChartOptions: ChartOptions = {
     responsive: true,
+    title: {},
+    legend: {
+      labels: {
+        fontColor: 'white',
+      },
+    },
     scales: {
       xAxes: [
         {
           type: 'time',
           ticks: {
             source: 'auto',
+            fontColor: '#fff',
+          },
+          gridLines: {
+            color: '#d7d7d7e2',
+          },
+        },
+      ],
+      yAxes: [
+        {
+          ticks: {
+            fontColor: '#fff',
+          },
+          gridLines: {
+            color: '#d7d7d7e2',
           },
         },
       ],
