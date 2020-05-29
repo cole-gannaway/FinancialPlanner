@@ -38,8 +38,7 @@
       <mat-cell *matCellDef="let element">
         <div class="label-form">
           <mat-form-field class="full-width">
-            <input matInput type="text" [(ngModel)]="element.label" required />
-            <mat-error>This field is required</mat-error>
+            <input matInput type="text" [(ngModel)]="element.label" />
           </mat-form-field>
         </div>
       </mat-cell>
@@ -54,7 +53,11 @@
         <div class="label-form">
           <mat-form-field class="full-width">
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="picker" />
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="element.date"
+            />
             <mat-datepicker-toggle
               matSuffix
               [for]="picker"
@@ -72,7 +75,14 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <mat-form-field style="min-width: 80px;">
-          <input matInput type="number" [(ngModel)]="element.amount" required />
+          <span matPrefix>$</span>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="element.amount"
+            step="0.01"
+            required
+          />
           <mat-error>This field is required</mat-error>
         </mat-form-field>
       </mat-cell>
@@ -83,16 +93,18 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         Frequency
       </mat-header-cell>
+
       <mat-cell *matCellDef="let element">
         <div class="label-form">
           <mat-form-field class="full-width">
-            <input
-              matInput
-              type="text"
-              [(ngModel)]="element.frequency"
-              required
-            />
-            <mat-error>This field is required</mat-error>
+            <mat-label>Frequency</mat-label>
+            <mat-select [(value)]="element.frequency">
+              <mat-option value="Annual">Annual</mat-option>
+              <mat-option value="Monthly">Monthly</mat-option>
+              <mat-option value="Weekly">Weekly</mat-option>
+              <mat-option value="Daily">Daily</mat-option>
+              <mat-option value="Once">Once</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
       </mat-cell>

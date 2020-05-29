@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 
 /* Angular Material Inputs */
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 
 /* Angular Date Picker */
@@ -46,6 +47,7 @@ import { ChartsModule } from 'ng2-charts';
     MatSortModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSelectModule,
     MatNativeDateModule,
     MatDatepickerModule,
     MatIconModule,
