@@ -16,7 +16,10 @@
   </div>
   <br /><br />
   <div class="line-chart-container">
-    <app-line-graph></app-line-graph>
+    <app-line-graph
+      [incomeData]="incomeTableData"
+      [expensesData]="expensesTableData"
+    ></app-line-graph>
   </div>
   <button (click)="debug()">Debug</button>
 </div>

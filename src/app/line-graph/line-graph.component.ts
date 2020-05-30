@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RowData } from '../model/RowData';
-import { Color } from 'ng2-charts';
-import { ChartOptions } from 'chart.js';
+import { ChartOptions, ChartData } from 'chart.js';
+import { EDataSource } from '../model/EDataSource';
 
 @Component({
   selector: 'app-line-graph',
@@ -13,6 +13,7 @@ export class LineGraphComponent implements OnInit {
   @Input('incomeData') incomeData: Array<RowData>;
   // tslint:disable-next-line: no-input-rename
   @Input('expensesData') expensesData: Array<RowData>;
+
   data = [
     {
       data: [
@@ -25,7 +26,7 @@ export class LineGraphComponent implements OnInit {
           y: -2,
         },
       ],
-      label: 'Expenses',
+      label: EDataSource[EDataSource.Expenses],
     },
     {
       data: [
@@ -38,7 +39,7 @@ export class LineGraphComponent implements OnInit {
           y: 2,
         },
       ],
-      label: 'Income',
+      label: EDataSource[EDataSource.Income],
     },
     {
       data: [
@@ -51,7 +52,7 @@ export class LineGraphComponent implements OnInit {
           y: 2,
         },
       ],
-      label: 'Wallet',
+      label: EDataSource[EDataSource.Wallet],
     },
   ];
   lineChartOptions: ChartOptions = {
@@ -93,4 +94,52 @@ export class LineGraphComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  render() {
+    const expensesChartData = this.generateChartDataFromRowDataArray(
+      this.expensesData
+    );
+    const incomeChartData = this.generateChartDataFromRowDataArray(
+      this.incomeData
+    );
+    const chartData = [];
+    chartData.push({
+      data: expensesChartData,
+      label: EDataSource[EDataSource.Expenses],
+    });
+    chartData.push({
+      data: incomeChartData,
+      label: EDataSource[EDataSource.Income],
+    });
+    chartData.push({
+      data: [
+        {
+          x: new Date(),
+          y: -2,
+        },
+        {
+          x: new Date().setDate(2),
+          y: 2,
+        },
+      ],
+      label: EDataSource[EDataSource.Wallet],
+    });
+    this.data = chartData;
+    this.debug();
+  }
+  generateChartDataFromRowDataArray(rowDataArr: Array<RowData>) {
+    const data = [];
+    rowDataArr.forEach((row) => {
+      data.push({
+        x: row.date,
+        y: row.amount,
+      });
+    });
+    return data;
+  }
+
+  debug() {
+    console.log(this.incomeData);
+    console.log(this.expensesData);
+  }
 }
