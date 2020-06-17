@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RowData } from './model/RowData';
+import { IRowData } from './model/IRowData';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +9,8 @@ import { RowData } from './model/RowData';
 })
 export class AppComponent {
   title = 'FinancialPlanner';
-  incomeTableData: Array<RowData> = new Array<RowData>();
-  expensesTableData: Array<RowData> = new Array<RowData>();
+  incomeTableData: Array<IRowData> = new Array<RowData>();
+  expensesTableData: Array<IRowData> = new Array<RowData>();
 
   debug() {
     console.log('debug');

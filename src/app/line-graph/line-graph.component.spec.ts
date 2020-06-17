@@ -8,9 +8,8 @@ describe('LineGraphComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LineGraphComponent ]
-    })
-    .compileComponents();
+      declarations: [LineGraphComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
