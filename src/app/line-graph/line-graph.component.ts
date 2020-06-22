@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import { ChartOptions } from 'chart.js';
 import { EDataSource } from '../model/EDataSource';
 import { ILineChartData } from '../model/ILineChartData';
@@ -18,6 +18,15 @@ export class LineGraphComponent implements OnInit {
   @Input('incomeData') incomeData: Array<IRowData>;
   // tslint:disable-next-line: no-input-rename
   @Input('expensesData') expensesData: Array<IRowData>;
+
+  // TODO use a service instead of listening for variable change
+  boundRenderBoolean: boolean = true;
+  @Input() set reRender(value: boolean) {
+    this.boundRenderBoolean = !this.boundRenderBoolean;
+    console.log('reRender');
+    this.render();
+  }
+
   data = [
     {
       data: [],

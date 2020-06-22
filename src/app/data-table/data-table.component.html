@@ -19,7 +19,7 @@
         matInput
         type="text"
         [(ngModel)]="filterText"
-        (keyup)="onFilterData($event)"
+        (keyup)="onFilterChange($event)"
       />
     </mat-form-field>
   </span>
@@ -31,7 +31,7 @@
     #table
     [dataSource]="dataSource"
     matSort
-    (matSortChange)="onSortData($event)"
+    (matSortChange)="onSortChange($event)"
   >
     <!-- Label Column -->
     <ng-container matColumnDef="label">
@@ -60,6 +60,7 @@
               matInput
               [matDatepicker]="picker"
               [(ngModel)]="element.date"
+              (dateChange)="handleDateChange($event)"
             />
             <mat-datepicker-toggle
               matSuffix
@@ -85,6 +86,7 @@
             [(ngModel)]="element.amount"
             step="0.01"
             required
+            (change)="handleAmountChange($event)"
           />
           <mat-error>This field is required</mat-error>
         </mat-form-field>
@@ -101,7 +103,10 @@
         <div class="label-form">
           <mat-form-field class="full-width">
             <mat-label>Frequency</mat-label>
-            <mat-select [(value)]="element.frequency">
+            <mat-select
+              [(value)]="element.frequency"
+              (selectionChange)="handleFrequencyChange($event)"
+            >
               <mat-option value="Annual">Annual</mat-option>
               <mat-option value="Monthly">Monthly</mat-option>
               <mat-option value="Weekly">Weekly</mat-option>
