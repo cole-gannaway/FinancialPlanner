@@ -12,13 +12,7 @@ export class AppComponent {
   incomeTableData: Array<IRowData> = new Array<RowData>();
   expensesTableData: Array<IRowData> = new Array<RowData>();
   reRender = true;
-  handleDataChangeEvent(event: any) {
-    console.log('handleDataChangeEvent occurred');
-    console.log(event);
-    // toggle for re rendering
-    console.log(this.reRender);
-    this.reRender = !this.reRender;
-  }
+
   debug() {
     console.log('debug');
     console.log(this.incomeTableData);

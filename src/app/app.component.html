@@ -4,28 +4,24 @@
   </div>
   <div class="data-tables-container">
     <div class="data-table-container">
-      <app-data-table
-        [data]="incomeTableData"
-        title="Income"
-        (dataChangeEvent)="handleDataChangeEvent($event)"
-      ></app-data-table>
+      <app-data-table [data]="incomeTableData" title="Income"></app-data-table>
     </div>
     <br /><br />
     <div class="data-table-container">
       <app-data-table
         [data]="expensesTableData"
         title="Expenses"
-        (dataChangeEvent)="handleDataChangeEvent($event)"
       ></app-data-table>
     </div>
   </div>
   <br /><br />
   <div class="line-chart-container">
+    <div class="line-chart-title-container">
+      <h2>Graphical Projection</h2>
+    </div>
     <app-line-graph
       [incomeData]="incomeTableData"
       [expensesData]="expensesTableData"
-      [reRender]="reRender"
     ></app-line-graph>
   </div>
-  <button (click)="debug()">Debug</button>
 </div>

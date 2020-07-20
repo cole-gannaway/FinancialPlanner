@@ -7,6 +7,7 @@ import { EAggregateDateOption } from '../model/EAggregateDateOption';
 import { IRowData } from '../model/IRowData';
 import { DateUtils } from '../utils/date/date-utils';
 import { LineGraphUtils } from '../utils/line-graph-utils/line-graph-utils';
+import { DataTableService } from '../service/data-table-service/data-table.service';
 
 @Component({
   selector: 'app-line-graph',
@@ -18,14 +19,6 @@ export class LineGraphComponent implements OnInit {
   @Input('incomeData') incomeData: Array<IRowData>;
   // tslint:disable-next-line: no-input-rename
   @Input('expensesData') expensesData: Array<IRowData>;
-
-  // TODO use a service instead of listening for variable change
-  boundRenderBoolean: boolean = true;
-  @Input() set reRender(value: boolean) {
-    this.boundRenderBoolean = !this.boundRenderBoolean;
-    console.log('reRender');
-    this.render();
-  }
 
   data = [
     {
@@ -80,7 +73,12 @@ export class LineGraphComponent implements OnInit {
   maxDate: Date = new Date();
   minDate: Date;
 
-  constructor() {}
+  constructor(dataTableService: DataTableService) {
+    // subscribe to changes
+    dataTableService.getChangeEventObservable().subscribe(() => {
+      this.render();
+    });
+  }
 
   ngOnInit(): void {
     // push out one week
@@ -172,7 +170,7 @@ export class LineGraphComponent implements OnInit {
       finalExpensesChartData
     );
 
-    this.debug();
+    // this.debug();
   }
   handleMaxDateChange() {
     this.render();

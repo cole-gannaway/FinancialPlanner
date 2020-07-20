@@ -3,6 +3,7 @@ import { Sort } from '@angular/material/sort';
 import { RowData } from '../model/RowData';
 import { MatTableDataSource } from '@angular/material/table';
 import { IRowData } from '../model/IRowData';
+import { DataTableService } from '../service/data-table-service/data-table.service';
 
 @Component({
   selector: 'app-data-table',
@@ -15,8 +16,7 @@ export class DataTableComponent implements OnInit {
   // tslint:disable-next-line: no-input-rename
   @Input('data') data: Array<IRowData>;
 
-  @Output() dataChangeEvent = new EventEmitter<string>();
-
+  dataTableService: DataTableService;
   dataSource: MatTableDataSource<IRowData> = new MatTableDataSource<IRowData>();
   filterText = '';
   displayedColumns: string[] = [
@@ -26,7 +26,9 @@ export class DataTableComponent implements OnInit {
     'frequency',
     'delete',
   ];
-  constructor() {}
+  constructor(dataTableService: DataTableService) {
+    this.dataTableService = dataTableService;
+  }
 
   ngOnInit(): void {}
 
@@ -45,7 +47,7 @@ export class DataTableComponent implements OnInit {
     console.log('add new row requested');
     this.data.push(new RowData());
     this.renderTable(this.data);
-    this.dataChangeEvent.emit('new row');
+    this.dataTableService.changeEvent('new row');
   }
   deleteRow(id: string) {
     console.log('delete row requested for id ' + id);
@@ -57,7 +59,7 @@ export class DataTableComponent implements OnInit {
       }
     }
     this.renderTable(this.data);
-    this.dataChangeEvent.emit('delete row');
+    this.dataTableService.changeEvent('delete row');
   }
   fillInDebug() {
     console.log('setting up debug environment');
@@ -82,12 +84,12 @@ export class DataTableComponent implements OnInit {
 
   // Data changes
   handleDateChange(event: any) {
-    this.dataChangeEvent.emit('date changed');
+    this.dataTableService.changeEvent('date changed');
   }
   handleAmountChange(event: any) {
-    this.dataChangeEvent.emit('amount changed');
+    this.dataTableService.changeEvent('amount changed');
   }
   handleFrequencyChange(event: any) {
-    this.dataChangeEvent.emit('frequency changed');
+    this.dataTableService.changeEvent('frequency changed');
   }
 }

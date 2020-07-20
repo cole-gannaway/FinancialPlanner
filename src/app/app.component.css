@@ -1,3 +1,5 @@
-.app-title-container {
+.app-title-container,
+.line-chart-title-container {
   color: white;
+  text-align: center;
 }
