@@ -175,13 +175,4 @@ export class LineGraphComponent implements OnInit {
   handleMaxDateChange() {
     this.render();
   }
-
-  debugMaxDate() {
-    console.log(this.maxDate);
-  }
-
-  debug() {
-    console.log(this.incomeData);
-    console.log(this.expensesData);
-  }
 }

@@ -4,6 +4,7 @@ import { RowData } from '../model/RowData';
 import { MatTableDataSource } from '@angular/material/table';
 import { IRowData } from '../model/IRowData';
 import { DataTableService } from '../service/data-table-service/data-table.service';
+import { CompareUtils } from '../model/CompareUtils';
 
 @Component({
   selector: 'app-data-table',
@@ -36,21 +37,24 @@ export class DataTableComponent implements OnInit {
     this.renderTable(this.data);
   }
   onSortChange(sortChange: Sort) {
-    console.log(
-      'sortChange requested for ' +
-        sortChange.active +
-        ' direction: ' +
-        sortChange.direction
-    );
+    const columnName: string = sortChange.active;
+    const isAscending: boolean = sortChange.direction === 'asc' ? true : false;
+    const comparator = CompareUtils.getComparator(columnName);
+    this.data.sort((a, b) => {
+      let retVal = comparator(a, b);
+      if (!isAscending) {
+        retVal = retVal * -1;
+      }
+      return retVal;
+    });
+    this.renderTable(this.data);
   }
   onAddNewRow() {
-    console.log('add new row requested');
     this.data.push(new RowData());
     this.renderTable(this.data);
     this.dataTableService.changeEvent('new row');
   }
   deleteRow(id: string) {
-    console.log('delete row requested for id ' + id);
     for (let i = 0; i < this.data.length; i++) {
       const row = this.data[i];
       if (row.getId() === id) {
@@ -61,21 +65,7 @@ export class DataTableComponent implements OnInit {
     this.renderTable(this.data);
     this.dataTableService.changeEvent('delete row');
   }
-  fillInDebug() {
-    console.log('setting up debug environment');
-    const todaysDate = new Date();
-    for (let i = 0; i < 10; i++) {
-      const createdDate = new Date(todaysDate.toString());
-      const createdVal = i;
-      createdDate.setDate(createdDate.getDate() + i);
-      // create row data
-      const createdRowData = new RowData();
-      createdRowData.setAmount(createdVal);
-      createdRowData.setDate(createdDate);
-      this.data.push(createdRowData);
-    }
-    this.renderTable(this.data);
-  }
+
   renderTable(data: IRowData[]) {
     this.dataSource.data = this.data.filter((row) => {
       return row.getLabel().includes(this.filterText);
