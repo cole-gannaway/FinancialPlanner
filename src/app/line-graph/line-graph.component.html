@@ -3,9 +3,11 @@
     <mat-label>Min Date</mat-label>
     <input
       matInput
+      [min]="minDateFromData"
+      [max]="maxDateFromData"
       [matDatepicker]="minPicker"
-      [(ngModel)]="minDate"
-      disabled
+      [(ngModel)]="minDateInput"
+      (dateChange)="handleMinDateChange()"
     />
     <mat-datepicker-toggle matSuffix [for]="minPicker"></mat-datepicker-toggle>
     <mat-datepicker #minPicker></mat-datepicker>
@@ -14,8 +16,10 @@
     <mat-label>End Date</mat-label>
     <input
       matInput
+      [min]="minDateFromData"
+      [max]="maxDateFromData"
       [matDatepicker]="picker"
-      [(ngModel)]="maxDate"
+      [(ngModel)]="maxDateInput"
       (dateChange)="handleMaxDateChange()"
     />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -23,7 +27,7 @@
   </mat-form-field>
 </div>
 
-<div style="display: block;">
+<div style="display: block">
   <canvas
     baseChart
     [datasets]="data"

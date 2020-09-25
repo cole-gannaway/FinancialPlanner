@@ -1,4 +1,5 @@
 import { RowData } from 'src/app/model/RowData';
+import { LineGraphUtils } from '../line-graph-utils/line-graph-utils';
 
 export class MintUtils {
   static payCheckStr = 'Paycheck';
@@ -10,7 +11,7 @@ export class MintUtils {
   static createRowData(row: string[]): RowData {
     const label = row[2];
     const date = new Date(row[0]);
-    const amount = Number.parseFloat(row[3]);
+    const amount = parseFloat(row[3]);
     const category = row[5];
     const frequency = 'Once';
     const rowData: RowData = RowData.createRowData(

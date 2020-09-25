@@ -5,30 +5,33 @@ import { DateUtils } from '../date/date-utils';
 import { EAggregateDateOption } from 'src/app/model/EAggregateDateOption';
 
 export class LineGraphUtils {
-  public static computeMinimumDate(
-    incomeChartData: ILineChartData[],
-    expensesChartData: ILineChartData[]
-  ): Date {
-    let minDate = null;
-    if (incomeChartData.length !== 0) {
-      const minIncomeDate = DateUtils.cloneDate(incomeChartData[0].x);
-      minDate = minIncomeDate;
+  static getMinOrMaxDate(a: Date, b: Date, isMin: boolean) {
+    let retVal: Date;
+    if (a === null || a === undefined) {
+      retVal = b;
     }
-    if (expensesChartData.length !== 0) {
-      const minExpensesDate = DateUtils.cloneDate(expensesChartData[0].x);
-      if (minDate != null) {
-        const compare = DateUtils.compareDates(minDate, minExpensesDate);
-        // expenses min date is < income min date
-        if (compare > 1) {
-          minDate = minExpensesDate;
-        }
+    if (b === null || b === undefined) {
+      retVal = a;
+    }
+    const compare = DateUtils.compareDates(a, b);
+    if (compare === 0) {
+      retVal = a;
+    } else if (compare > 0) {
+      if (isMin) {
+        retVal = b;
       } else {
-        // nothing to compare to
-        minDate = minExpensesDate;
+        retVal = a;
+      }
+    } else if (compare < 0) {
+      if (isMin) {
+        retVal = a;
+      } else {
+        retVal = b;
       }
     }
-    return minDate;
+    return DateUtils.cloneDate(retVal);
   }
+
   /**
    *
    * @param rowDataArr  value
@@ -92,8 +95,6 @@ export class LineGraphUtils {
       // compare inclusively
       DateUtils.compareDates(currDate, endDate) <= 0
     );
-    {
-    }
 
     return data;
   }
@@ -112,6 +113,7 @@ export class LineGraphUtils {
     let currentWallet = intialValue;
     delataData.forEach((chartData) => {
       currentWallet += chartData.y;
+      currentWallet = LineGraphUtils.roundCurrency(currentWallet);
       data.push({
         x: DateUtils.cloneDate(chartData.x),
         y: currentWallet,
@@ -179,5 +181,9 @@ export class LineGraphUtils {
       });
     });
     return data;
+  }
+
+  public static roundCurrency(num: number) {
+    return Math.round(num * 100) / 100;
   }
 }

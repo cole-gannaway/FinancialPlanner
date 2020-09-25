@@ -230,38 +230,4 @@ describe('LineGraphUtils', () => {
     expect(aggregateMap1).toEqual(expectedAggregateMap1);
     expect(aggregateMap2).toEqual(expectedAggregateMap2);
   });
-  /////////////////////////// MISC //////////////////////////////////////////
-  it('should compute minimum date from chart data', () => {
-    const emptyIncomeChartData: ILineChartData[] = [];
-    const emptyExpensesChartData: ILineChartData[] = [];
-    const incomeChartData: ILineChartData[] = [
-      // 1970 January 1
-      { x: new Date(1970, 1 - 1, 1), y: 1 },
-    ];
-    const expensesChartData: ILineChartData[] = [
-      // 1970 January 2
-      { x: new Date(1970, 1 - 1, 2), y: 1 },
-    ];
-
-    // Empty Income Chart Data
-    const shouldEqualExpensesMinimum = LineGraphUtils.computeMinimumDate(
-      emptyIncomeChartData,
-      expensesChartData
-    );
-    expect(shouldEqualExpensesMinimum).toEqual(expensesChartData[0].x);
-
-    // Empty Expenses Chart Data
-    const shouldEqualIncomeMinimum = LineGraphUtils.computeMinimumDate(
-      incomeChartData,
-      emptyExpensesChartData
-    );
-    expect(shouldEqualIncomeMinimum).toEqual(incomeChartData[0].x);
-
-    // Income Chart Data Is Minimum
-    const shouldEqualIncomeMinimum2 = LineGraphUtils.computeMinimumDate(
-      incomeChartData,
-      expensesChartData
-    );
-    expect(shouldEqualIncomeMinimum2).toEqual(incomeChartData[0].x);
-  });
 });
