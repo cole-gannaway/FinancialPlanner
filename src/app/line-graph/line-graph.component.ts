@@ -254,11 +254,11 @@ export class LineGraphComponent implements OnInit {
     // combine chartData
     const chartData = [];
     chartData.push({
-      data: finalIncomeChartData,
+      data: finalExpensesChartData,
       label: EDataSource[EDataSource.Expenses],
     });
     chartData.push({
-      data: finalExpensesChartData,
+      data: finalIncomeChartData,
       label: EDataSource[EDataSource.Income],
     });
     chartData.push({
