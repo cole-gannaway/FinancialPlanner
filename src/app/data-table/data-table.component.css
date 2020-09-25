@@ -1,6 +1,6 @@
 .data-table-container {
   height: 400px;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 /* This fills the remaining space, by using flexbox. 

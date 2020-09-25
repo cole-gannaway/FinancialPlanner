@@ -1,10 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { RowData } from '../model/RowData';
 import { MatTableDataSource } from '@angular/material/table';
 import { IRowData } from '../model/IRowData';
 import { DataTableService } from '../service/data-table-service/data-table.service';
 import { CompareUtils } from '../model/CompareUtils';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-data-table',
@@ -16,6 +24,8 @@ export class DataTableComponent implements OnInit {
   @Input('title') title: string;
   // tslint:disable-next-line: no-input-rename
   @Input('data') data: Array<IRowData>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataTableService: DataTableService;
   dataSource: MatTableDataSource<IRowData> = new MatTableDataSource<IRowData>();
@@ -33,8 +43,10 @@ export class DataTableComponent implements OnInit {
       this.renderTable(this.data);
     });
   }
-
-  ngOnInit(): void {}
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   onFilterChange(event: any) {
     this.renderTable(this.data);
@@ -72,7 +84,10 @@ export class DataTableComponent implements OnInit {
   renderTable(data: IRowData[]) {
     console.log('begin render table');
     this.dataSource.data = this.data.filter((row) => {
-      return row.getLabel().includes(this.filterText);
+      return row
+        .getLabel()
+        .toLowerCase()
+        .includes(this.filterText.toLowerCase());
     });
     console.log('done');
   }
