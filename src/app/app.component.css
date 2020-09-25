@@ -1,5 +1,6 @@
 .app-title-container,
-.line-chart-title-container {
+.line-chart-title-container,
+.csv-uploader-container {
   color: white;
   text-align: center;
 }

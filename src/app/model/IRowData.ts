@@ -5,6 +5,10 @@ export interface IRowData {
 
   setLabel(label: string): void;
 
+  getCategory(): string;
+
+  setCategory(category: string): void;
+
   getAmount(): number;
 
   setAmount(amount: number): void;

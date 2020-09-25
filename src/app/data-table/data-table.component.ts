@@ -29,6 +29,9 @@ export class DataTableComponent implements OnInit {
   ];
   constructor(dataTableService: DataTableService) {
     this.dataTableService = dataTableService;
+    dataTableService.getChangeEventObservable().subscribe(() => {
+      this.renderTable(this.data);
+    });
   }
 
   ngOnInit(): void {}
@@ -67,9 +70,11 @@ export class DataTableComponent implements OnInit {
   }
 
   renderTable(data: IRowData[]) {
+    console.log('begin render table');
     this.dataSource.data = this.data.filter((row) => {
       return row.getLabel().includes(this.filterText);
     });
+    console.log('done');
   }
 
   // Data changes

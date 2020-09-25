@@ -9,6 +9,7 @@ export class RowData implements IRowData {
   private frequency: string;
   private date: Date;
   private id: string;
+  private category: string;
 
   constructor() {
     this.label = '';
@@ -16,13 +17,20 @@ export class RowData implements IRowData {
     this.frequency = 'Once';
     this.date = new Date();
     this.id = uuidv4();
+    this.category = '';
   }
 
-  public static createRowData(amount: number, frequency: string, date: Date) {
+  public static createRowData(
+    amount: number,
+    frequency: string,
+    date: Date,
+    category: string
+  ) {
     const created = new RowData();
     created.setAmount(amount);
     created.setFrequency(frequency);
     created.setDate(date);
+    created.setCategory(category);
     return created;
   }
 
@@ -32,6 +40,14 @@ export class RowData implements IRowData {
 
   public setLabel(label: string): void {
     this.label = label;
+  }
+
+  public getCategory(): string {
+    return this.category;
+  }
+
+  public setCategory(category: string): void {
+    this.category = category;
   }
 
   public getAmount(): number {

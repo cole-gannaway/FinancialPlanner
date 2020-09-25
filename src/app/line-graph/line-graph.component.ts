@@ -100,6 +100,7 @@ export class LineGraphComponent implements OnInit {
       this.maxDate
     );
 
+    console.log('aggregating data');
     // aggregate all data
     const aggregateOption = EAggregateDateOption.DAY;
     const incomeChartMap = LineGraphUtils.aggregateChartDataBy(
@@ -111,6 +112,7 @@ export class LineGraphComponent implements OnInit {
       aggregateOption
     );
 
+    console.log('converting to maps to chartdata');
     // convert maps back to chartData
     const finalExpensesChartData = LineGraphUtils.convertMapToChartData(
       expensesChartMap
@@ -119,6 +121,7 @@ export class LineGraphComponent implements OnInit {
       incomeChartMap
     );
 
+    console.log('sorting chartdata by date');
     // sort by date
     finalIncomeChartData.sort((a: ILineChartData, b: ILineChartData) => {
       return DateUtils.compareDates(a.x, b.x);
@@ -127,6 +130,7 @@ export class LineGraphComponent implements OnInit {
       return DateUtils.compareDates(a.x, b.x);
     });
 
+    console.log('building wallet map');
     // create walletMap
     const walletChartMap = new Map<string, number>();
     incomeChartMap.forEach((value: number, key: string) => {
@@ -135,19 +139,24 @@ export class LineGraphComponent implements OnInit {
     expensesChartMap.forEach((value: number, key: string) => {
       LineGraphUtils.appendToMap(walletChartMap, key, value);
     });
+
+    console.log('building wallet chart data');
     // create walletChartData
     const walletChartData = LineGraphUtils.convertMapToChartData(
       walletChartMap
     );
+    console.log('sorting wallet chart data');
     walletChartData.sort((a: ILineChartData, b: ILineChartData) => {
       return DateUtils.compareDates(a.x, b.x);
     });
     const initialWalletValue = 0;
+    console.log('generating wallet data from inital wallet value');
     const finalWalletChartData = LineGraphUtils.generateChartDataFromDeltas(
       initialWalletValue,
       walletChartData
     );
 
+    console.log('putting all chart data together');
     // combine chartData
     const chartData = [];
     chartData.push({
@@ -164,12 +173,14 @@ export class LineGraphComponent implements OnInit {
     });
     this.data = chartData;
 
+    console.log('finding minimum date');
     // set minimum date
     this.minDate = LineGraphUtils.computeMinimumDate(
       finalIncomeChartData,
       finalExpensesChartData
     );
 
+    console.log('done');
     // this.debug();
   }
   handleMaxDateChange() {

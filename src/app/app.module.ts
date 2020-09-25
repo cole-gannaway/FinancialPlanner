@@ -31,9 +31,10 @@ import { MatIconModule } from '@angular/material/icon';
 
 /* Charts */
 import { ChartsModule } from 'ng2-charts';
+import { CSVUploaderComponent } from './csvuploader/csvuploader.component';
 
 @NgModule({
-  declarations: [AppComponent, DataTableComponent, LineGraphComponent],
+  declarations: [AppComponent, DataTableComponent, LineGraphComponent, CSVUploaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

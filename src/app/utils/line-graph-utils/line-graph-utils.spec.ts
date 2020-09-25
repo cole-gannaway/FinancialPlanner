@@ -14,7 +14,7 @@ describe('LineGraphUtils', () => {
     const startDate = new Date(1970, 1, 1);
     const endDate = new Date(1970, 1, 7);
     const amount = 1;
-    const rowData = RowData.createRowData(amount, 'Daily', startDate);
+    const rowData = RowData.createRowData(amount, 'Daily', startDate, '');
     const generatedChartData = LineGraphUtils.generateChartDataFromRowData(
       rowData.getAmount(),
       rowData.getFrequencyAsEnum(),
@@ -37,7 +37,7 @@ describe('LineGraphUtils', () => {
     const startDate = new Date(1970, 1, 1);
     const endDate = new Date(1970, 1, 15);
     const amount = 1;
-    const rowData = RowData.createRowData(amount, 'Weekly', startDate);
+    const rowData = RowData.createRowData(amount, 'Weekly', startDate, '');
     const generatedChartData = LineGraphUtils.generateChartDataFromRowData(
       rowData.getAmount(),
       rowData.getFrequencyAsEnum(),
@@ -56,7 +56,7 @@ describe('LineGraphUtils', () => {
     const startDate = new Date(1970, 1, 1);
     const endDate = new Date(1970, 3, 1);
     const amount = 1;
-    const rowData = RowData.createRowData(amount, 'Monthly', startDate);
+    const rowData = RowData.createRowData(amount, 'Monthly', startDate, '');
     const generatedChartData = LineGraphUtils.generateChartDataFromRowData(
       rowData.getAmount(),
       rowData.getFrequencyAsEnum(),
@@ -75,7 +75,7 @@ describe('LineGraphUtils', () => {
     const startDate = new Date(1970, 1, 1);
     const endDate = new Date(1973, 1, 1);
     const amount = 1;
-    const rowData = RowData.createRowData(amount, 'Annual', startDate);
+    const rowData = RowData.createRowData(amount, 'Annual', startDate, '');
     const generatedChartData = LineGraphUtils.generateChartDataFromRowData(
       rowData.getAmount(),
       rowData.getFrequencyAsEnum(),
