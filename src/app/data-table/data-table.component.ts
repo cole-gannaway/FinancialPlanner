@@ -43,6 +43,7 @@ export class DataTableComponent implements OnInit {
       this.renderTable(this.data);
     });
   }
+  ngOnInit(): void {}
   // tslint:disable-next-line: use-lifecycle-interface
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
