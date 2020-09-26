@@ -8,6 +8,7 @@ import { IRowData } from '../model/IRowData';
 import { DateUtils } from '../utils/date/date-utils';
 import { LineGraphUtils } from '../utils/line-graph-utils/line-graph-utils';
 import { DataTableService } from '../service/data-table-service/data-table.service';
+import { EnumUtils } from '../utils/enum/EnumUtils';
 
 @Component({
   selector: 'app-line-graph',
@@ -20,8 +21,12 @@ export class LineGraphComponent implements OnInit {
   // tslint:disable-next-line: no-input-rename
   @Input('expensesData') expensesData: Array<IRowData>;
 
+  initialWalletAmount = 0;
+  aggregateOptionStr = 'Day';
+  aggregateOption: EAggregateDateOption = EAggregateDateOption.DAY;
   minDateInput: Date = new Date();
   maxDateInput: Date = new Date();
+  prevMaxDateInput: Date = null;
 
   minDateFromData: Date = new Date();
   maxDateFromData: Date = new Date();
@@ -83,37 +88,52 @@ export class LineGraphComponent implements OnInit {
   constructor(dataTableService: DataTableService) {
     // subscribe to changes
     dataTableService.getChangeEventObservable().subscribe(() => {
-      this.updateIncomeAndExpensesChartDataFromDataRows();
-      this.updateWalletChartDataFromIncomeAndExpensesChartData();
-      this.updateMaxAndMinDate(true);
-      this.render();
+      this.setIncomeAndExpensesChartDataFromDataRows(
+        this.maxDateInput,
+        this.aggregateOption
+      );
+      this.setMaxAndMinDateFromLineChartData();
+      this.copyMinAndMaxDatesFromDataToMinAndMaxInputs();
+      this.filterAndRenderLineChartDatas();
     });
   }
 
   ngOnInit(): void {
     // push out one week
-    this.maxDateInput.setDate(this.minDateInput.getDate() + 7);
-    this.maxDateFromData.setDate(this.maxDateFromData.getDate() + 7);
+    const createdDate = new Date();
+    createdDate.setDate(createdDate.getDate() + 7);
+
+    this.maxDateInput = DateUtils.cloneDate(createdDate);
+    this.maxDateFromData = DateUtils.cloneDate(createdDate);
   }
 
-  updateIncomeAndExpensesChartDataFromDataRows() {
-    // generate expenses data for chart
+  copyMinAndMaxDatesFromDataToMinAndMaxInputs() {
+    this.minDateInput = DateUtils.cloneDate(this.minDateFromData);
+    this.maxDateInput = DateUtils.cloneDate(this.maxDateFromData);
+  }
+
+  setIncomeAndExpensesChartDataFromDataRows(
+    endDate: Date,
+    aggregateOption: EAggregateDateOption
+  ) {
+    // generate expenses data for chart up to end date
     const expensesChartData: ILineChartData[] = LineGraphUtils.generateChartDataFromRowDataArray(
       this.expensesData,
-      this.maxDateInput
+      endDate
     );
+
+    // make expenses data negative
     expensesChartData.forEach((value) => {
       value.y = value.y * -1;
     });
-    // generate income data for chart
+
+    // generate income data for chart up to end date
     const incomeChartData: ILineChartData[] = LineGraphUtils.generateChartDataFromRowDataArray(
       this.incomeData,
-      this.maxDateInput
+      endDate
     );
 
-    console.log('aggregating data');
-    // aggregate all data
-    const aggregateOption = EAggregateDateOption.DAY;
+    // aggregate income and expenses data using maps
     const incomeChartMap = LineGraphUtils.aggregateChartDataBy(
       incomeChartData,
       aggregateOption
@@ -123,69 +143,74 @@ export class LineGraphComponent implements OnInit {
       aggregateOption
     );
 
-    console.log('converting to maps to chartdata');
-    // convert maps back to chartData
-    const finalExpensesChartData = LineGraphUtils.convertMapToChartData(
-      expensesChartMap
+    // convert aggregated maps back to chartData
+    const aggregatedExpensesChartData = LineGraphUtils.convertMapToChartData(
+      expensesChartMap,
+      aggregateOption
     );
-    const finalIncomeChartData = LineGraphUtils.convertMapToChartData(
-      incomeChartMap
+    const aggregatedIncomeChartData = LineGraphUtils.convertMapToChartData(
+      incomeChartMap,
+      aggregateOption
     );
 
-    console.log('sorting chartdata by date');
-    // sort by date
-    finalIncomeChartData.sort((a: ILineChartData, b: ILineChartData) => {
+    // sort aggregated by date
+    aggregatedIncomeChartData.sort((a: ILineChartData, b: ILineChartData) => {
       return DateUtils.compareDates(a.x, b.x);
     });
-    finalExpensesChartData.sort((a: ILineChartData, b: ILineChartData) => {
+    aggregatedExpensesChartData.sort((a: ILineChartData, b: ILineChartData) => {
       return DateUtils.compareDates(a.x, b.x);
     });
 
-    this.incomeLineChartData = finalIncomeChartData;
-    this.expensesLineChartData = finalExpensesChartData;
+    // save results
+    this.incomeLineChartData = aggregatedIncomeChartData;
+    this.expensesLineChartData = aggregatedExpensesChartData;
   }
-  updateWalletChartDataFromIncomeAndExpensesChartData() {
-    console.log('building wallet map');
-    // create walletMap
-    const walletChartMap = new Map<string, number>();
 
-    // aggregate all data
-    const aggregateOption = EAggregateDateOption.DAY;
+  setWalletChartDataFromIncomeAndExpensesChartData(
+    filteredIncomeChartData: ILineChartData[],
+    filteredExpensesChartData: ILineChartData[],
+    aggregateOption: EAggregateDateOption,
+    initialWalletValue: number
+  ) {
+    // aggregate income and expense data
     const incomeChartMap = LineGraphUtils.aggregateChartDataBy(
-      this.incomeLineChartData,
+      filteredIncomeChartData,
       aggregateOption
     );
     const expensesChartMap = LineGraphUtils.aggregateChartDataBy(
-      this.expensesLineChartData,
+      filteredExpensesChartData,
       aggregateOption
     );
 
+    // compute wallet deltas by aggregates
+    const walletDeltaMap = new Map<string, number>();
     incomeChartMap.forEach((value: number, key: string) => {
-      LineGraphUtils.appendToMap(walletChartMap, key, value);
+      LineGraphUtils.appendToMap(walletDeltaMap, key, value);
     });
     expensesChartMap.forEach((value: number, key: string) => {
-      LineGraphUtils.appendToMap(walletChartMap, key, value);
+      LineGraphUtils.appendToMap(walletDeltaMap, key, value);
     });
 
-    console.log('building wallet chart data');
-    // create walletChartData
-    const walletChartData = LineGraphUtils.convertMapToChartData(
-      walletChartMap
+    // convert aggregate deltas map to chart data
+    const walletDeltaChartData = LineGraphUtils.convertMapToChartData(
+      walletDeltaMap,
+      aggregateOption
     );
-    console.log('sorting wallet chart data');
-    walletChartData.sort((a: ILineChartData, b: ILineChartData) => {
+
+    // sort delta chart data by date
+    walletDeltaChartData.sort((a: ILineChartData, b: ILineChartData) => {
       return DateUtils.compareDates(a.x, b.x);
     });
-    const initialWalletValue = 0;
-    console.log('generating wallet data from inital wallet value');
-    const finalWalletChartData = LineGraphUtils.generateChartDataFromDeltas(
+
+    // apply inital wallet to deltas
+    const finalWalletDeltaChartData = LineGraphUtils.generateChartDataFromDeltas(
       initialWalletValue,
-      walletChartData
+      walletDeltaChartData
     );
-    this.walletLineChartData = finalWalletChartData;
+
+    this.walletLineChartData = finalWalletDeltaChartData;
   }
-  updateMaxAndMinDate(updateMinAndMaxDate: boolean) {
-    console.log('finding minimum and maximum dates');
+  setMaxAndMinDateFromLineChartData() {
     // find min and max income date
     let minIncomeDate: Date | null = null;
     let maxIncomeDate: Date | null = null;
@@ -225,57 +250,92 @@ export class LineGraphComponent implements OnInit {
     if (maxDate) {
       this.maxDateFromData = maxDate;
     }
-
-    if (updateMinAndMaxDate) {
-      // set minimum date
-      this.minDateInput = DateUtils.cloneDate(this.minDateFromData);
-      // set maximum date
-      this.maxDateInput = DateUtils.cloneDate(this.maxDateFromData);
-    }
   }
-  render() {
-    const isInRange = (data: ILineChartData) => {
-      const minCompare = DateUtils.compareDates(this.minDateInput, data.x);
-      const maxCompare = DateUtils.compareDates(this.maxDateInput, data.x);
-      // after min and before
-      if (minCompare <= 0 && maxCompare >= 0) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
-    // filter using the range comparator
-    const finalIncomeChartData = this.incomeLineChartData.filter(isInRange);
-    const finalExpensesChartData = this.expensesLineChartData.filter(isInRange);
-    const finalWalletChartData = this.walletLineChartData.filter(isInRange);
-
-    console.log('putting all chart data together');
-    // combine chartData
+  filterAndRenderLineChartDatas() {
+    const filteredIncomeLineChartData = LineGraphUtils.filterLineChartData(
+      this.incomeLineChartData,
+      this.minDateInput,
+      this.maxDateInput
+    );
+    const filteredExpensesLineChartData = LineGraphUtils.filterLineChartData(
+      this.expensesLineChartData,
+      this.minDateInput,
+      this.maxDateInput
+    );
+    this.setWalletChartDataFromIncomeAndExpensesChartData(
+      filteredIncomeLineChartData,
+      filteredExpensesLineChartData,
+      this.aggregateOption,
+      this.initialWalletAmount
+    );
+    this.renderChartData(
+      filteredIncomeLineChartData,
+      filteredExpensesLineChartData,
+      this.walletLineChartData
+    );
+  }
+  renderChartData(
+    incomeLineChartData: ILineChartData[],
+    expensesLineChartData: ILineChartData[],
+    walletLineChartData: ILineChartData[]
+  ) {
     const chartData = [];
     chartData.push({
-      data: finalExpensesChartData,
+      data: expensesLineChartData,
       label: EDataSource[EDataSource.Expenses],
     });
     chartData.push({
-      data: finalIncomeChartData,
+      data: incomeLineChartData,
       label: EDataSource[EDataSource.Income],
     });
     chartData.push({
-      data: finalWalletChartData,
+      data: walletLineChartData,
       label: EDataSource[EDataSource.Wallet],
     });
     this.data = chartData;
-
-    console.log('done');
   }
 
   handleMaxDateChange() {
-    this.updateMaxAndMinDate(false);
-    this.render();
+    let compare = 1;
+    if (this.prevMaxDateInput != null) {
+      compare = DateUtils.compareDates(
+        this.maxDateInput,
+        this.prevMaxDateInput
+      );
+    }
+    // max date increased causes recalculation
+    if (compare > 0) {
+      this.setIncomeAndExpensesChartDataFromDataRows(
+        this.maxDateInput,
+        this.aggregateOption
+      );
+      this.setMaxAndMinDateFromLineChartData();
+      // skip copyMinAndMaxDatesFromDataToMinAndMaxInputs
+    }
+    this.filterAndRenderLineChartDatas();
+
+    // update previous
+    this.prevMaxDateInput = DateUtils.cloneDate(this.maxDateInput);
   }
   handleMinDateChange() {
-    this.updateMaxAndMinDate(false);
-    this.render();
+    this.filterAndRenderLineChartDatas();
+  }
+  handleAggregateOptionChange() {
+    // convert new value
+    const newAggregateOption = EnumUtils.convertStringToEAggregateDateOption(
+      this.aggregateOptionStr
+    );
+
+    // set new value
+    this.aggregateOption = newAggregateOption;
+
+    // re-calculate data using new aggregate option
+    this.setIncomeAndExpensesChartDataFromDataRows(
+      this.maxDateInput,
+      this.aggregateOption
+    );
+    this.setMaxAndMinDateFromLineChartData();
+    this.copyMinAndMaxDatesFromDataToMinAndMaxInputs();
+    this.filterAndRenderLineChartDatas();
   }
 }

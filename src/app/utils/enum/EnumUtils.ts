@@ -1,3 +1,4 @@
+import { EAggregateDateOption } from 'src/app/model/EAggregateDateOption';
 import { EFrequency } from '../../model/EFrequency';
 
 export class EnumUtils {
@@ -15,6 +16,19 @@ export class EnumUtils {
         return EFrequency.WEEKLY;
       default:
         return EFrequency.UNKNOWN;
+    }
+  }
+
+  public static convertStringToEAggregateDateOption(
+    value: string
+  ): EAggregateDateOption {
+    switch (value) {
+      case 'Year':
+        return EAggregateDateOption.YEAR;
+      case 'Month':
+        return EAggregateDateOption.MONTH;
+      case 'Day':
+        return EAggregateDateOption.DAY;
     }
   }
 }

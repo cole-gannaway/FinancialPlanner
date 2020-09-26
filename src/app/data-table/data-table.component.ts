@@ -83,14 +83,12 @@ export class DataTableComponent implements OnInit {
   }
 
   renderTable(data: IRowData[]) {
-    console.log('begin render table');
     this.dataSource.data = this.data.filter((row) => {
       return row
         .getLabel()
         .toLowerCase()
         .includes(this.filterText.toLowerCase());
     });
-    console.log('done');
   }
 
   // Data changes

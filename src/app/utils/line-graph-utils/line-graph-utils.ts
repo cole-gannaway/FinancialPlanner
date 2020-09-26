@@ -9,26 +9,27 @@ export class LineGraphUtils {
     let retVal: Date;
     if (a === null || a === undefined) {
       retVal = b;
-    }
-    if (b === null || b === undefined) {
+    } else if (b === null || b === undefined) {
       retVal = a;
-    }
-    const compare = DateUtils.compareDates(a, b);
-    if (compare === 0) {
-      retVal = a;
-    } else if (compare > 0) {
-      if (isMin) {
-        retVal = b;
-      } else {
+    } else {
+      const compare = DateUtils.compareDates(a, b);
+      if (compare === 0) {
         retVal = a;
-      }
-    } else if (compare < 0) {
-      if (isMin) {
-        retVal = a;
-      } else {
-        retVal = b;
+      } else if (compare > 0) {
+        if (isMin) {
+          retVal = b;
+        } else {
+          retVal = a;
+        }
+      } else if (compare < 0) {
+        if (isMin) {
+          retVal = a;
+        } else {
+          retVal = b;
+        }
       }
     }
+
     return DateUtils.cloneDate(retVal);
   }
 
@@ -172,11 +173,14 @@ export class LineGraphUtils {
    * @param map  map
    * @returns chart data
    */
-  public static convertMapToChartData(map: Map<string, number>) {
+  public static convertMapToChartData(
+    map: Map<string, number>,
+    aggregrateOption: EAggregateDateOption
+  ) {
     const data: ILineChartData[] = [];
     map.forEach((value: number, key: string) => {
       data.push({
-        x: new Date(key),
+        x: DateUtils.createDateFromKey(key, aggregrateOption),
         y: value,
       });
     });
@@ -185,5 +189,15 @@ export class LineGraphUtils {
 
   public static roundCurrency(num: number) {
     return Math.round(num * 100) / 100;
+  }
+
+  public static filterLineChartData(
+    lineChartData: ILineChartData[],
+    startDate: Date,
+    endDate: Date
+  ) {
+    return lineChartData.filter((data) =>
+      DateUtils.isInRange(data.x, startDate, endDate)
+    );
   }
 }

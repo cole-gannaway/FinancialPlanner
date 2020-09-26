@@ -53,8 +53,6 @@ export class CSVUploaderComponent implements OnInit {
   public processCsv(text: string) {
     const rows: Array<Array<string>> = parse(text).data;
 
-    console.log('converting rows to rowData');
-
     // remove header row
     rows.shift();
 
@@ -66,7 +64,6 @@ export class CSVUploaderComponent implements OnInit {
         return rowData;
       });
 
-    console.log(rowDatas);
     // add to tables
     rowDatas.forEach((row) => {
       const isExcluded = MintUtils.isAlwaysExcluded(row.getCategory());
@@ -78,7 +75,7 @@ export class CSVUploaderComponent implements OnInit {
         this.expenses.push(row);
       }
     });
-    console.log('done');
+
     this.dataTableService.changeEvent('uploaded csv');
   }
 

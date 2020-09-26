@@ -2,6 +2,29 @@ import { EAggregateDateOption } from 'src/app/model/EAggregateDateOption';
 import { EFrequency } from 'src/app/model/EFrequency';
 
 export class DateUtils {
+  public static createDateFromKey(
+    key: string,
+    aggregrateOption: EAggregateDateOption
+  ): Date {
+    let retVal = null;
+    switch (aggregrateOption) {
+      case EAggregateDateOption.YEAR:
+        const createdDate = new Date('1-1-1970');
+        // tslint:disable-next-line: radix
+        const year = Number.parseInt(key);
+        createdDate.setFullYear(year);
+        retVal = createdDate;
+        break;
+      case EAggregateDateOption.MONTH:
+        retVal = new Date(key);
+        break;
+      case EAggregateDateOption.DAY:
+        retVal = new Date(key);
+        break;
+    }
+    return retVal;
+  }
+
   public static createKeyByAggregateOption(
     d: Date,
     aggregateOption: EAggregateDateOption
@@ -66,5 +89,20 @@ export class DateUtils {
         break;
     }
     return createdDate;
+  }
+
+  public static isInRange(
+    testVal: Date,
+    minDate: Date,
+    maxDate: Date
+  ): boolean {
+    const minCompare = DateUtils.compareDates(minDate, testVal);
+    const maxCompare = DateUtils.compareDates(maxDate, testVal);
+    // after min and before
+    if (minCompare <= 0 && maxCompare >= 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

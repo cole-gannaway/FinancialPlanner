@@ -4,7 +4,7 @@
     <input
       matInput
       [min]="minDateFromData"
-      [max]="maxDateFromData"
+      [max]="maxDateInput"
       [matDatepicker]="minPicker"
       [(ngModel)]="minDateInput"
       (dateChange)="handleMinDateChange()"
@@ -16,14 +16,25 @@
     <mat-label>End Date</mat-label>
     <input
       matInput
-      [min]="minDateFromData"
-      [max]="maxDateFromData"
+      [min]="minDateInput"
       [matDatepicker]="picker"
       [(ngModel)]="maxDateInput"
       (dateChange)="handleMaxDateChange()"
     />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Aggregate By</mat-label>
+    <mat-select
+      [(value)]="aggregateOptionStr"
+      (selectionChange)="handleAggregateOptionChange()"
+    >
+      <mat-option value="Year">Year</mat-option>
+      <mat-option value="Month">Month</mat-option>
+      <mat-option value="Day">Day</mat-option>
+    </mat-select>
   </mat-form-field>
 </div>
 
